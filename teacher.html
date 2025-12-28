@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<div class="box">
+    <h2>Teacher Dashboard</h2>
+
+    <button onclick="generateQR()">Generate QR (2 Minutes)</button>
+    <div id="qrcode"></div>
+    <p id="timer"></p>
+
+    <a href="index.html">Logout</a>
+</div>
+
+<script>
+let expiryTime;
+
+function generateQR() {
+    if(!navigator.geolocation) {
+        alert("GPS not supported");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(pos => {
+
+        expiryTime = Date.now() + 2 * 60 * 1000;
+
+        let qrData = {
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+            expiry: expiryTime
+        };
+
+        localStorage.setItem("qrData", JSON.stringify(qrData));
+
+        document.getElementById("qrcode").innerHTML = "";
+
+        new QRCode(document.getElementById("qrcode"), {
+            text: JSON.stringify(qrData),
+            width: 200,
+            height: 200
+        });
+
+        startTimer();
+    });
+}
+
+function startTimer() {
+    let interval = setInterval(() => {
+        let seconds = Math.floor((expiryTime - Date.now()) / 1000);
+        if(seconds <= 0) {
+            clearInterval(interval);
+            document.getElementById("timer").innerText = "QR Expired";
+        } else {
+            document.getElementById("timer").innerText =
+                "QR valid for: " + seconds + " seconds";
+        }
+    }, 1000);
+}
+</script>
+
+</body>
+</html>

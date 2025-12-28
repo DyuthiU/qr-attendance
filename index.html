@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="box">
+    <h2>Login</h2>
+
+    <select id="role">
+        <option value="">Select Role</option>
+        <option value="teacher">Teacher</option>
+        <option value="student">Student</option>
+    </select>
+
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+    <p id="msg"></p>
+</div>
+
+<script>
+function login() {
+    let role = document.getElementById("role").value;
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+
+    if(role === "teacher" && user === "teacher" && pass === "1234") {
+        window.location.href = "teacher.html";
+    }
+    else if(role === "student" && user === "student" && pass === "1234") {
+        window.location.href = "student.html";
+    }
+    else {
+        document.getElementById("msg").innerText = "Invalid Login ❌";
+    }
+}
+</script>
+
+</body>
+</html>
